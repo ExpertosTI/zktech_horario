@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_attendance_report_user,hr.attendance.report.user,model_hr_attendance_report,base.group_user,1,1,1,0
+access_hr_attendance_report_manager,hr.attendance.report.manager,model_hr_attendance_report,hr.group_hr_manager,1,1,1,1
+access_hr_attendance_schedule_user,hr.attendance.schedule.user,model_hr_attendance_schedule,base.group_user,1,1,1,0
+access_hr_attendance_schedule_manager,hr.attendance.schedule.manager,model_hr_attendance_schedule,hr.group_hr_manager,1,1,1,1
+access_hr_attendance_report_summary_user,hr.attendance.report.summary.user,model_hr_attendance_report_summary,base.group_user,1,0,0,0
+access_hr_attendance_report_summary_manager,hr.attendance.report.summary.manager,model_hr_attendance_report_summary,hr.group_hr_manager,1,1,1,1
+access_import_attendance_wizard_user,import.attendance.wizard.user,model_import_attendance_wizard,base.group_user,1,1,1,1

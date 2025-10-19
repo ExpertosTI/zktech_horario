@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menú Principal -->
+    <menuitem id="menu_attendance_compliance_root"
+              name="Cumplimiento de Horarios"
+              sequence="10"
+              web_icon="hr_attendance_compliance_v18,static/description/icon.png"/>
+
+    <!-- Submenú Reportes -->
+    <menuitem id="menu_attendance_compliance_reports"
+              name="Reportes"
+              parent="menu_attendance_compliance_root"
+              sequence="10"/>
+
+    <menuitem id="menu_attendance_report_summary"
+              name="Resumen de Cumplimiento"
+              parent="menu_attendance_compliance_reports"
+              action="action_attendance_report_summary"
+              sequence="10"/>
+
+    <menuitem id="menu_attendance_report"
+              name="Registros de Asistencia"
+              parent="menu_attendance_compliance_reports"
+              action="action_attendance_report"
+              sequence="20"/>
+
+    <!-- Submenú Configuración -->
+    <menuitem id="menu_attendance_compliance_config"
+              name="Configuración"
+              parent="menu_attendance_compliance_root"
+              sequence="20"/>
+
+    <menuitem id="menu_attendance_schedule"
+              name="Horarios Personalizados"
+              parent="menu_attendance_compliance_config"
+              action="action_attendance_schedule"
+              sequence="10"/>
+
+    <menuitem id="menu_import_attendance"
+              name="Importar Asistencia"
+              parent="menu_attendance_compliance_config"
+              action="action_import_attendance_wizard"
+              sequence="20"/>
+</odoo>

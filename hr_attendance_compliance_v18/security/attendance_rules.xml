@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Multi-company record rules: users and HR managers see only their companies -->
+    <record id="rule_hr_attendance_report_multi_company" model="ir.rule">
+        <field name="name">HR Attendance Report: Multi-company</field>
+        <field name="model_id" ref="model_hr_attendance_report"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', user.company_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user')), (4, ref('hr.group_hr_manager'))]"/>
+    </record>
+
+    <record id="rule_hr_attendance_report_summary_multi_company" model="ir.rule">
+        <field name="name">HR Attendance Report Summary: Multi-company</field>
+        <field name="model_id" ref="model_hr_attendance_report_summary"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', user.company_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user')), (4, ref('hr.group_hr_manager'))]"/>
+    </record>
+
+    <record id="rule_hr_attendance_schedule_multi_company" model="ir.rule">
+        <field name="name">HR Attendance Schedule: Multi-company</field>
+        <field name="model_id" ref="model_hr_attendance_schedule"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', user.company_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user')), (4, ref('hr.group_hr_manager'))]"/>
+    </record>
+</odoo>

@@ -1,0 +1,109 @@
+/* Estilos inspirados en index.html para Odoo backend */
+:root {
+  --primary-color: #005A9C;
+  --secondary-color: #003F6E;
+  --bg-color: #f4f7fc;
+  --card-bg: #ffffff;
+  --text-color: #333;
+  --light-gray: #e9ecef;
+  --danger-color: #d9534f;
+  --warning-color: #f0ad4e;
+  --success-color: #5cb85c;
+  --info-color: #5bc0de;
+  --border-radius: 8px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.o_kanban_view .attendance-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  border-left: 6px solid var(--primary-color);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.o_kanban_view .attendance-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* Colores según estado para tarjetas de resumen */
+.o_kanban_view .attendance-card.ok { border-left-color: var(--success-color); }
+.o_kanban_view .attendance-card.warning { border-left-color: var(--warning-color); }
+.o_kanban_view .attendance-card.critical { border-left-color: var(--danger-color); }
+
+.attendance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.attendance-name {
+  font-size: 1.1em;
+  color: var(--secondary-color);
+  font-weight: 700;
+}
+.attendance-period {
+  font-size: 0.85em;
+  color: #666;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.stat-box {
+  background: var(--bg-color);
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 1.2em;
+  font-weight: 700;
+}
+.stat-label { font-size: 0.85em; color: #666; }
+
+.verdict-pill {
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+.verdict-ok { background: var(--success-color); }
+.verdict-warning { background: var(--warning-color); }
+.verdict-critical { background: var(--danger-color); }
+
+/* Tarjetas diarias */
+.day-card {
+  background: var(--bg-color);
+  border-radius: 6px;
+  padding: 12px;
+  border-left: 4px solid var(--primary-color);
+}
+/* Colores según estado para tarjetas diarias */
+.day-card.on_time { border-left-color: var(--success-color); }
+.day-card.absent { border-left-color: var(--danger-color); opacity: 0.9; }
+.day-card.late { border-left-color: var(--warning-color); }
+
+.day-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.day-title { font-weight:600; color: var(--secondary-color); }
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.8em;
+}
+/* Estados de badge */
+.badge.on_time { background: var(--success-color);} 
+.badge.absent { background: var(--danger-color);} 
+.badge.late { background: var(--warning-color);} 
+
+.timestamps { display:flex; flex-wrap:wrap; gap:8px; }
+.timestamp { background:#fff; padding:6px 10px; border-radius:6px; border:1px solid var(--light-gray); font-family: 'Courier New', monospace; }
+.day-header .btn { margin-left: 8px; }
+.attendance-header .btn { margin-left: 8px; }
