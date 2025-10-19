@@ -16,7 +16,7 @@
         - Dashboard con estadísticas
         - Exportación de reportes
     """,
-    'author': 'RENACE.TECH',
+    'author': 'Adderly Marte (RENACE.TECH)',
     'website': 'https://renace.tech',
     'depends': ['base', 'hr'],
     'data': [
