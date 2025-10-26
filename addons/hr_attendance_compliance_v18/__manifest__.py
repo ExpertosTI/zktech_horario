@@ -1,6 +1,6 @@
 {
     'name': 'Cumplimiento de Asistencia y Horarios',
-    'version': '18.0.1.0.7',
+    'version': '18.0.1.0.8',
     'category': 'Human Resources',
     'summary': 'Reporte de Cumplimiento de Horarios y Asistencia',
     'description': """
@@ -37,5 +37,5 @@
             'hr_attendance_compliance_v18/static/src/css/attendance_dashboard.css',
         ],
     },
-    'external_dependencies': {'python': ['openpyxl']},
+    'external_dependencies': {'python': ['openpyxl', 'requests']},
 }

@@ -17,6 +17,9 @@ class ImportAttendanceWizard(models.TransientModel):
         ('csv', 'CSV'),
         ('excel', 'Excel'),
     ], string='Tipo de Archivo', compute='_compute_file_type')
+    # Parámetros de conexión al servidor (para pruebas de conectividad)
+    zk_ip = fields.Char(string='IP/Host del servidor', default='localhost')
+    zk_port = fields.Integer(string='Puerto', default=9095)
     
     @api.depends('file_name')
     def _compute_file_type(self):
@@ -64,6 +67,94 @@ class ImportAttendanceWizard(models.TransientModel):
         except Exception as e:
             raise UserError(_('Error al procesar el archivo: %s') % str(e))
 
+    def action_check_connection(self):
+        """Verifica conectividad al endpoint del servidor (por ejemplo /zk/ping)"""
+        self.ensure_one()
+        ip = (self.zk_ip or 'localhost').strip()
+        port = int(self.zk_port or 9095)
+        ping_url = f"http://{ip}:{port}/zk/ping"
+        version_url = f"http://{ip}:{port}/web/webclient/version_info"
+
+        # Intento 1: /zk/ping
+        try:
+            try:
+                import requests
+            except ImportError:
+                requests = None
+            if requests:
+                resp = requests.get(ping_url, timeout=5)
+                if resp.status_code == 200:
+                    msg = _('Conexión OK al endpoint: %s') % ping_url
+                    return {
+                        'type': 'ir.actions.client',
+                        'tag': 'display_notification',
+                        'params': {
+                            'title': _('Conectado'),
+                            'message': msg,
+                            'type': 'success',
+                            'sticky': False,
+                        }
+                    }
+                else:
+                    raise UserError(_('HTTP %s en %s') % (resp.status_code, ping_url))
+            else:
+                # Fallback a urllib si requests no está disponible
+                import urllib.request
+                with urllib.request.urlopen(ping_url, timeout=5) as resp:
+                    if resp.status == 200:
+                        msg = _('Conexión OK al endpoint: %s') % ping_url
+                        return {
+                            'type': 'ir.actions.client',
+                            'tag': 'display_notification',
+                            'params': {
+                                'title': _('Conectado'),
+                                'message': msg,
+                                'type': 'success',
+                                'sticky': False,
+                            }
+                        }
+        except Exception:
+            # Intento 2: versión de Odoo
+            try:
+                if requests:
+                    resp2 = requests.get(version_url, timeout=5)
+                    if resp2.status_code == 200:
+                        return {
+                            'type': 'ir.actions.client',
+                            'tag': 'display_notification',
+                            'params': {
+                                'title': _('Conectado (versión)'),
+                                'message': _('El servidor respondió: %s') % version_url,
+                                'type': 'success',
+                                'sticky': False,
+                            }
+                        }
+                else:
+                    import urllib.request
+                    with urllib.request.urlopen(version_url, timeout=5) as resp2:
+                        if resp2.status == 200:
+                            return {
+                                'type': 'ir.actions.client',
+                                'tag': 'display_notification',
+                                'params': {
+                                    'title': _('Conectado (versión)'),
+                                    'message': _('El servidor respondió: %s') % version_url,
+                                    'type': 'success',
+                                    'sticky': False,
+                                }
+                            }
+            except Exception as e2:
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'title': _('Sin conexión'),
+                        'message': _('No se pudo conectar a %s ni %s. Detalle: %s') % (ping_url, version_url, str(e2)),
+                        'type': 'danger',
+                        'sticky': False,
+                    }
+                }
+    
     def _decode_bytes(self, data_bytes):
         """Decodifica bytes a texto probando encodings comunes (UTF-8, latin-1, cp1252)."""
         for enc in ('utf-8', 'utf-8-sig', 'latin-1', 'cp1252'):

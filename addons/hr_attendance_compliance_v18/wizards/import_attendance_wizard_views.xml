@@ -12,8 +12,13 @@
                         <field name="file_name" readonly="1"/>
                         <field name="file_type" readonly="1"/>
                     </group>
+                    <group string="Verificar Conexión">
+                        <field name="zk_ip"/>
+                        <field name="zk_port"/>
+                    </group>
                 </sheet>
                 <footer>
+                    <button string="Verificar Conexión" name="action_check_connection" type="object" class="btn-secondary"/>
                     <button string="Importar" name="action_import" type="object" class="btn-primary"/>
                     <button string="Cancelar" special="cancel" class="btn-secondary"/>
                 </footer>
