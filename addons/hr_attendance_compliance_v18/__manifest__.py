@@ -26,6 +26,7 @@
         'views/attendance_report_views.xml',
         'views/attendance_schedule_views.xml',
         'views/menu.xml',
+        'data/ir_config_parameter.xml',
     ],
     'images': ['static/description/icon.png'],
     'installable': True,

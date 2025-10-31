@@ -18,8 +18,25 @@ class ImportAttendanceWizard(models.TransientModel):
         ('excel', 'Excel'),
     ], string='Tipo de Archivo', compute='_compute_file_type')
     # Parámetros de conexión al servidor (para pruebas de conectividad)
-    zk_ip = fields.Char(string='IP/Host del servidor', default='localhost')
-    zk_port = fields.Integer(string='Puerto', default=9095)
+    @api.model
+    def _get_default_zk_ip(self):
+        ip = self.env['ir.config_parameter'].sudo().get_param(
+            'hr_attendance_compliance_v18.zk_ip', default='86.38.217.170'
+        )
+        return ip or '86.38.217.170'
+
+    @api.model
+    def _get_default_zk_port(self):
+        val = self.env['ir.config_parameter'].sudo().get_param(
+            'hr_attendance_compliance_v18.zk_port', default='9095'
+        )
+        try:
+            return int(val)
+        except Exception:
+            return 9095
+
+    zk_ip = fields.Char(string='IP/Host del servidor', default=_get_default_zk_ip)
+    zk_port = fields.Integer(string='Puerto', default=_get_default_zk_port)
     
     @api.depends('file_name')
     def _compute_file_type(self):
@@ -82,7 +99,7 @@ class ImportAttendanceWizard(models.TransientModel):
             except ImportError:
                 requests = None
             if requests:
-                resp = requests.get(ping_url, timeout=5)
+                resp = requests.get(ping_url, timeout=3)
                 if resp.status_code == 200:
                     msg = _('Conexión OK al endpoint: %s') % ping_url
                     return {
@@ -100,7 +117,7 @@ class ImportAttendanceWizard(models.TransientModel):
             else:
                 # Fallback a urllib si requests no está disponible
                 import urllib.request
-                with urllib.request.urlopen(ping_url, timeout=5) as resp:
+                with urllib.request.urlopen(ping_url, timeout=3) as resp:
                     if resp.status == 200:
                         msg = _('Conexión OK al endpoint: %s') % ping_url
                         return {
@@ -117,7 +134,7 @@ class ImportAttendanceWizard(models.TransientModel):
             # Intento 2: versión de Odoo
             try:
                 if requests:
-                    resp2 = requests.get(version_url, timeout=5)
+                    resp2 = requests.get(version_url, timeout=3)
                     if resp2.status_code == 200:
                         return {
                             'type': 'ir.actions.client',
@@ -131,7 +148,7 @@ class ImportAttendanceWizard(models.TransientModel):
                         }
                 else:
                     import urllib.request
-                    with urllib.request.urlopen(version_url, timeout=5) as resp2:
+                    with urllib.request.urlopen(version_url, timeout=3) as resp2:
                         if resp2.status == 200:
                             return {
                                 'type': 'ir.actions.client',
